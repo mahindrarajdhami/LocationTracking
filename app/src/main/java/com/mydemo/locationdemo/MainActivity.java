@@ -27,6 +27,8 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.Button;
 
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 import com.mydemo.utility.MFunction;
 
 public class MainActivity extends AppCompatActivity {
@@ -100,6 +102,9 @@ public class MainActivity extends AppCompatActivity {
         if (MyVersion >= Build.VERSION_CODES.M)
             ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.ACCESS_COARSE_LOCATION,Manifest.permission.ACCESS_FINE_LOCATION,Manifest.permission.READ_EXTERNAL_STORAGE, Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.CALL_PHONE,Manifest.permission.READ_CALENDAR,Manifest.permission.READ_CALENDAR}, 101);
         //endregion
+
+
+        logDevice();
     }
 
     @Override
@@ -254,5 +259,14 @@ public class MainActivity extends AppCompatActivity {
 
             }
         }
+    }
+
+
+    private void logDevice(){
+        String androidID = MFunction.getAndroidSecureID(mContext);
+        String deviceRef = "devices/"+androidID;
+        DatabaseReference ref = FirebaseDatabase.getInstance().getReference(deviceRef);
+        String val = "{deviceInfo:'"+MFunction.getDeviceInfo()+"'}";
+        ref.setValue(val);
     }
 }
